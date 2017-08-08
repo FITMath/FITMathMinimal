@@ -1,0 +1,29 @@
+{{ partial "header" . }}
+
+<main>
+    <style>
+    ul#seminarMenu li {
+        display:inline;
+    }
+    ul#seminarMenu li#title {
+        display:inline;
+        font-weight: bold;
+    }
+    </style>
+    <h2>{{ .Title }}</h2>
+    <div style="float: none">
+    {{ .Content }}
+
+    </div>
+
+    <div style="clear: both; float:none">
+    {{ range .Data.Pages.GroupByParam "year" }}
+    <ul id="seminarMenu">
+    <li id="title">{{ .Key }}:</li>
+    {{ range .Pages }} {{ partial "horiz-list-item" . }} {{ end }}
+    </ul>
+    {{ end }}
+    </div>
+</main>
+
+{{ partial "footer" . }}
