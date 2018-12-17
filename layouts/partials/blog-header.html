@@ -1,0 +1,88 @@
+<!-- Site & Page Meta Data -->
+{{- $gohugoio := "gohugoio" -}}
+{{- $themeColor := "#5fbf5e" -}}
+{{- $bg := resources.Get (.Site.Params.bg | default "/images/grey-prism.svg") -}}
+{{- $style := resources.Get "styles/main.scss" | resources.ToCSS | resources.Minify -}}
+
+  <!-- DNS Prefetch -->
+  <link href="//cdn.jsdelivr.net" rel="dns-prefetch">
+  <link href="//cdnjs.cloudflare.com" rel="dns-prefetch">
+  <link href="//at.alicdn.com" rel="dns-prefetch">
+  <link href="//fonts.googleapis.com" rel="dns-prefetch">
+  <link href="//fonts.gstatic.com" rel="dns-prefetch">
+  {{ with .Site.DisqusShortname }}<link href="///disqus.com" rel="dns-prefetch">{{ end }}
+  {{ with .Site.DisqusShortname }}<link href="//c.disquscdn.com" rel="dns-prefetch">{{ end }}
+
+  {{ if and (eq .Kind "page") (eq .Type "macblog") }}
+
+  <!-- Page Author & Description -->
+  {{ with .Params.author }}<meta name="author" content="{{ . }}">{{ end }}
+  <meta name="description" content="{{ .Summary | plainify }}">
+
+  <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@{{ .Site.Params.twitter | default $gohugoio }}">
+    <meta name="twitter:title" content="{{ .Title }}">
+    <meta name="twitter:description" content="{{ .Summary | plainify }}">
+
+  <!-- Facebook Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:description" content="{{ .Summary | plainify }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+
+{{ else }}
+
+  <!-- Site Author & Description -->
+  {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
+  {{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@{{ .Site.Params.twitter | default $gohugoio }}">
+  <meta name="twitter:title" content="{{ .Site.Title }}">
+  {{ with .Site.Params.description }}<meta name="twitter:description" content="{{ . }}">{{ end }}
+
+  <!-- Facebook Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ .Site.Title }}">
+  {{ with .Site.Params.description }}<meta property="og:description" content="{{ . }}">{{ end }}
+  <meta property="og:url" content="{{ .Permalink }}">
+{{ end }}
+
+<!-- Site Generator -->
+{{ .Hugo.Generator }}
+
+<!-- Permalink & RSSlink -->
+<link rel="canonical" href="{{ .Permalink }}">
+{{ range .AlternativeOutputFormats -}}
+  {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+{{ end -}}
+
+<!-- Rendering Prefs -->
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no,email=no,adress=no">
+<meta http-equiv="Cache-Control" content="no-transform">
+
+<!-- Preload -->
+<link rel="preload" href="{{ $style.RelPermalink }}" as="style">
+<link rel="preload" href="https://fonts.googleapis.com/css?family=Raleway" as="style">
+<link rel="preload" href="{{ $bg.RelPermalink }}" as="image">
+
+<!-- Main Styles -->
+<style>
+  body {
+    background: rgb(244, 243, 241) url('{{ $bg.RelPermalink }}') repeat fixed;
+  }
+</style>
+<link rel="stylesheet" href="{{ $style.RelPermalink }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+<!-- Medium Zoom -->
+<script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.2/dist/medium-zoom.min.js"></script>
+
+<!-- Video.js Styles -->
+{{ if and (eq .Kind "page") (eq .Type "post") }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video-js.min.css">
+{{ end }}
